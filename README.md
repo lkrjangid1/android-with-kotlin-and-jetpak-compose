@@ -9,3 +9,5 @@ https://appdevnotes.com/android-viewmodel-tutorial-for-beginners-in-kotlin/
 More-about-ViewModelFactory
 https://appdevnotes.com/android-viewmodel-tutorial-for-beginners-in-kotlin/#factory
 
+Read-more-about-LiveData
+https://appdevnotes.com/android-livedata-tutorial-for-beginners-in-kotlin/
