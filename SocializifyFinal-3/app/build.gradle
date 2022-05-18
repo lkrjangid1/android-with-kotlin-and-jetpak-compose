@@ -1,0 +1,105 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: DatePlugin
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    defaultConfig {
+        applicationId "com.raywenderlich.socializify"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+    // 1
+    signingConfigs {
+        // 2
+        release {
+            // 3
+            storeFile file("keys/release.jks")
+            storePassword "password"
+            keyAlias "key"
+            keyPassword "password"
+        }
+    }
+
+    // 1
+    buildTypes {
+        // 2
+        release {
+            signingConfig signingConfigs.release
+        }
+        // 3
+        debug {
+
+        }
+    }
+    // 1
+    flavorDimensions "appMode"
+    // 2
+    productFlavors {
+        // 3
+        free {
+            // 4
+            dimension "appMode"
+            // 5
+            applicationIdSuffix ".free"
+            // 6
+            manifestPlaceholders = [appName: "@string/app_name_free"]
+        }
+        // 7
+        paid {
+            dimension "appMode"
+            applicationIdSuffix ".paid"
+            manifestPlaceholders = [appName: "@string/app_name_paid"]
+        }
+    }
+}
+
+// 1
+task addCurrentDate() {
+    // 2
+    android.applicationVariants.all { variant ->
+        // 3
+        variant.outputs.all { output ->
+            // 4
+            def date = new Date().format("dd-MM-yyyy")
+            // 5
+            def fileName = variant.name + "_" + date + ".apk"
+            // 6
+            output.outputFileName = fileName
+        }
+    }
+}
+
+class DatePlugin implements Plugin<Project> {
+    void apply(Project project) {
+        project.task('addCurrentDatePluginTask') {
+            project.android.applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def date = new Date().format("dd-MM-yyyy")
+                    def fileName = variant.name + "_" + date + ".apk"
+                    output.outputFileName = fileName
+                }
+            }
+        }
+    }
+}
+
+// 1
+gradle.taskGraph.afterTask {
+    // 2
+    addCurrentDatePluginTask
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
+    implementation "com.android.support:design:$rootProject.supportVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$rootProject.kotlinVersion"
+    // 1
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+}
+

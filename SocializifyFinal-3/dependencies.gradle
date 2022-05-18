@@ -1,0 +1,9 @@
+ext {
+    minSdkVersion = 17
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = "26.0.2"
+    kotlinVersion = "1.1.51"
+    supportVersion = "27.0.1"
+    picassoVersion = "2.5.2"
+}
